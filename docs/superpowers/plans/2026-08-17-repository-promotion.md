@@ -16,6 +16,9 @@
 - Modify: `README.md` — English promotional landing page.
 - Modify: `README.zh.md` — complete Chinese counterpart.
 - Create: `tests/readme.spec.ts` — repository presentation contract for asset references, bilingual structure, truthful limitations, and install commands.
+- Create: `tests/package.spec.ts` — public-development portability contract.
+- Modify: `package.json` — replace machine-local development links with published versions.
+- Modify: `pnpm-lock.yaml` — lock the published development dependency graph.
 - Modify externally: GitHub repository description, homepage, topics, and release `v0.1.0`.
 - Upload externally: `C:\Users\29648\Documents\Codex\2026-08-17\qi\outputs\dsh-change-budget-0.1.0.tgz` as the release asset.
 
@@ -67,6 +70,46 @@ Use the local image viewer and confirm:
 ```powershell
 git add assets/dsh-change-budget-hero.png
 git commit -m "docs: add repository hero artwork"
+```
+
+### Task 1A: Make the public development setup portable
+
+**Files:**
+- Create: `tests/package.spec.ts`
+- Modify: `package.json`
+- Modify: `pnpm-lock.yaml`
+
+- [ ] **Step 1: Add a failing package portability test**
+
+The test parses `package.json` and rejects every `devDependencies` value that begins with `file:` or `link:`, or with an absolute Windows drive path.
+
+- [ ] **Step 2: Verify the machine-local dependency failure**
+
+```powershell
+corepack pnpm vitest run tests/package.spec.ts
+```
+
+Expected: FAIL on `link:D:/Deepseek harness/...`.
+
+- [ ] **Step 3: Replace local links with published development versions**
+
+Use `@deepseek-ai/cordis@4.0.1` and `0.1.0-rc.6` for `@deepseek-ai/dsh-llm`, `@deepseek-ai/dsh-system-prompt`, and `@deepseek-ai/dsh-tools`. Keep the runtime peer range compatible with Harness rc.5.
+
+- [ ] **Step 4: Reinstall and verify public development compatibility**
+
+```powershell
+corepack pnpm install
+corepack pnpm vitest run tests/package.spec.ts tests/classify.spec.ts tests/budget.spec.ts tests/plugin.spec.ts
+corepack pnpm run typecheck
+```
+
+Expected: package portability, all 15 runtime tests, and typecheck PASS.
+
+- [ ] **Step 5: Commit the portability fix**
+
+```powershell
+git add package.json pnpm-lock.yaml tests/package.spec.ts docs/superpowers/plans/2026-08-17-repository-promotion.md
+git commit -m "chore: make public development setup portable"
 ```
 
 ### Task 2: Add a failing README presentation contract

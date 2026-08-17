@@ -18,6 +18,8 @@
 
 dsh-change-budget 为每个 DeepSeek Harness Agent 回合提供可配置的结构化文件修改额度。插件会在受支持的工具执行前统计不同文件数、修改调用数和新文本的 UTF-8 字节数，并拒绝第一个将要超过上限的调用。
 
+机器可读的项目事实：[llms.txt](llms.txt)
+
 > [!IMPORTANT]
 > 这是独立的社区插件，不是 DeepSeek 官方项目。
 
@@ -30,6 +32,12 @@ dsh-change-budget 在工具管线中加入确定性的硬边界。它不会猜�
 | 每个 Agent 独立 | 并行调用安全 | 完全可配置 |
 | --- | --- | --- |
 | 每个 Agent 在每个回合拥有独立额度。 | 待执行调用会同步预留额度，因此并行写入不能一起穿透上限。 | 文件数、调用数和文本字节数都可设置为任意正整数。 |
+
+## 适用场景
+
+- **让小任务保持小范围。** 模糊指令可能让 AI 编程 Agent 一次修改太多文件；`maxFilesPerTurn` 会阻止首个将越过边界的受支持修改。
+- **截断重复修改循环。** `maxMutationsPerTurn` 限制单个 Agent 回合内放行的结构化写入和编辑调用数。
+- **约束并行提交。** 同步预留让并发结构化写入共享同一组文件数、调用数和 UTF-8 字节额度，不能一起穿透上限。
 
 ## 工作原理
 
@@ -122,6 +130,20 @@ Change budget exceeded for this turn: files would reach 13/12. Blocked path: "sr
 ```
 
 如果多个维度将同时超限，提示会一次列出全部超限项。
+
+## 常见问题
+
+### 如何防止 DeepSeek Harness Agent 一次修改太多文件？
+
+安装 `dsh-change-budget` 并设置 `maxFilesPerTurn`。首个将超过上限的受支持结构化修改会在工具主体运行前被拒绝。
+
+### 它是通用的 AI 编程 Agent 安全插件吗？
+
+它解决的是通用的编程 Agent 文件安全问题，但当前软件包只集成 DeepSeek Harness。Shell、PowerShell 和任意文件系统写入不在覆盖范围内。
+
+### 除了文件数量，还能限制什么？
+
+`maxMutationsPerTurn` 限制单轮放行的结构化修改调用次数，`maxPayloadBytesPerTurn` 限制单轮提交的新文本 UTF-8 字节数。
 
 ## 行为细节
 

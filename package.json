@@ -1,7 +1,27 @@
 {
   "name": "dsh-change-budget",
   "version": "0.1.0",
-  "description": "Per-turn structured file mutation budgets for DeepSeek Harness",
+  "description": "DeepSeek Harness guardrail that limits how many files an AI coding agent can edit per turn",
+  "keywords": [
+    "deepseek-harness",
+    "dsh-plugin",
+    "ai-agent",
+    "coding-agent",
+    "file-safety",
+    "file-editing",
+    "edit-limit",
+    "guardrail",
+    "circuit-breaker",
+    "tool-budget"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Raphaelutumn/dsh-change-budget.git"
+  },
+  "homepage": "https://github.com/Raphaelutumn/dsh-change-budget#readme",
+  "bugs": {
+    "url": "https://github.com/Raphaelutumn/dsh-change-budget/issues"
+  },
   "type": "module",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -19,6 +39,7 @@
     "cordis.patch.yml",
     "README.md",
     "README.zh.md",
+    "llms.txt",
     "LICENSE"
   ],
   "dsh": {

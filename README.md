@@ -18,6 +18,8 @@
 
 dsh-change-budget gives every DeepSeek Harness Agent turn a configurable budget for structured file mutations. It counts distinct files, mutation calls, and submitted UTF-8 bytes before supported tools run—then rejects the first call that would cross a limit.
 
+Machine-readable project facts: [llms.txt](llms.txt)
+
 > [!IMPORTANT]
 > This is an independent community plugin. It is not an official DeepSeek project.
 
@@ -30,6 +32,12 @@ dsh-change-budget adds a deterministic boundary at the tool pipeline. It does no
 | Per-Agent isolation | Parallel-safe reservations | Fully configurable |
 | --- | --- | --- |
 | Every Agent gets an independent budget for each turn. | Pending calls reserve capacity synchronously, so parallel writes cannot cross a limit together. | Set positive-integer limits for files, calls, and payload bytes. |
+
+## Use cases
+
+- **Keep a small request small.** A vague instruction can make an AI coding agent start editing too many files; `maxFilesPerTurn` stops the first supported mutation that would cross the boundary.
+- **Break repeated edit loops.** `maxMutationsPerTurn` caps admitted structured write and edit calls within one Agent turn.
+- **Bound parallel payloads.** Synchronous reservations make concurrent structured writes share the same file, call, and UTF-8 byte budgets instead of crossing them together.
 
 ## How it works
 
@@ -122,6 +130,20 @@ Change budget exceeded for this turn: files would reach 13/12. Blocked path: "sr
 ```
 
 When several dimensions would be exceeded, the message reports all of them together.
+
+## Frequently asked questions
+
+### How do I stop a DeepSeek Harness agent from editing too many files?
+
+Install `dsh-change-budget` and set `maxFilesPerTurn`. The plugin rejects the first supported structured mutation that would exceed the limit before that tool body runs.
+
+### Is this a general AI coding agent guardrail?
+
+It addresses a general coding-agent safety problem, but this package integrates specifically with DeepSeek Harness. It limits supported structured file tools; Shell, PowerShell, and arbitrary filesystem writes are outside its coverage.
+
+### Can I limit more than the number of files?
+
+Yes. `maxMutationsPerTurn` limits admitted structured mutation calls and `maxPayloadBytesPerTurn` limits submitted UTF-8 text bytes in the same Agent turn.
 
 ## Behavior details
 

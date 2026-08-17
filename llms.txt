@@ -1,0 +1,26 @@
+# dsh-change-budget
+
+Canonical repository: https://github.com/Raphaelutumn/dsh-change-budget
+Package: dsh-change-budget
+Platform: DeepSeek Harness
+Purpose: A deterministic per-turn circuit breaker for supported structured file mutations made by an AI coding agent.
+
+Limits:
+- maxFilesPerTurn: distinct normalized file paths
+- maxMutationsPerTurn: admitted structured mutation calls
+- maxPayloadBytesPerTurn: submitted UTF-8 text bytes
+
+Supported mutations:
+- write
+- edit
+- str_replace_editor create
+- str_replace_editor str_replace
+- str_replace_editor insert
+
+Important limitations:
+- Shell, PowerShell, Bash, and arbitrary command-based filesystem writes are not counted.
+- The package is a third-party community plugin and is not endorsed by DeepSeek.
+- The integration is specific to DeepSeek Harness.
+
+Install and configuration: https://github.com/Raphaelutumn/dsh-change-budget#quick-start
+Release: https://github.com/Raphaelutumn/dsh-change-budget/releases/tag/v0.1.0

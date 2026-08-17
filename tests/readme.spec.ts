@@ -3,23 +3,35 @@ import { describe, expect, it } from 'vitest'
 
 const english = readFileSync(new URL('../README.md', import.meta.url), 'utf8')
 const chinese = readFileSync(new URL('../README.zh.md', import.meta.url), 'utf8')
+const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')) as {
+  description: string
+  keywords: string[]
+  repository: { type: string; url: string }
+  homepage: string
+  bugs: { url: string }
+  files: string[]
+}
 
 const requiredEnglish = [
   'Why change budgets?',
+  'Use cases',
   'How it works',
   'Quick start',
   'Configuration',
   'Counted mutations',
+  'Frequently asked questions',
   'Limitations',
   'Contributing',
 ]
 
 const requiredChinese = [
   '为什么需要修改额度？',
+  '适用场景',
   '工作原理',
   '快速开始',
   '配置',
   '计入额度的修改',
+  '常见问题',
   '限制',
   '参与贡献',
 ]
@@ -46,5 +58,35 @@ describe('repository presentation', () => {
       expect(readme).toMatch(/Shell|PowerShell/)
       expect(readme).toMatch(/symlink|Symlink|符号链接/)
     }
+  })
+
+  it('answers natural-language discovery questions and ships machine-readable facts', () => {
+    const llms = readFileSync(new URL('../llms.txt', import.meta.url), 'utf8')
+    expect(english).toContain('editing too many files')
+    expect(english).toContain('AI coding agent')
+    expect(chinese).toContain('一次修改太多文件')
+    expect(chinese).toContain('AI 编程 Agent')
+    for (const text of [english, chinese, llms]) {
+      expect(text).toContain('maxFilesPerTurn')
+      expect(text).toContain('maxMutationsPerTurn')
+      expect(text).toContain('maxPayloadBytesPerTurn')
+      expect(text).toMatch(/Shell|PowerShell/)
+    }
+  })
+
+  it('publishes consistent npm discovery metadata', () => {
+    expect(pkg.description).toMatch(/DeepSeek Harness/i)
+    expect(pkg.description).toMatch(/limit/i)
+    expect(pkg.keywords).toEqual(expect.arrayContaining([
+      'deepseek-harness',
+      'dsh-plugin',
+      'ai-agent',
+      'file-safety',
+      'guardrail',
+    ]))
+    expect(pkg.repository.url).toContain('Raphaelutumn/dsh-change-budget')
+    expect(pkg.homepage).toContain('Raphaelutumn/dsh-change-budget')
+    expect(pkg.bugs.url).toContain('Raphaelutumn/dsh-change-budget/issues')
+    expect(pkg.files).toContain('llms.txt')
   })
 })

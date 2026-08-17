@@ -15,6 +15,7 @@
   "files": [
     "lib/**/*.js",
     "lib/**/*.d.ts",
+    "assets/dsh-change-budget-hero.png",
     "cordis.patch.yml",
     "README.md",
     "README.zh.md",

@@ -15,6 +15,7 @@
   "files": [
     "lib/**/*.js",
     "lib/**/*.d.ts",
+    "assets/dsh-change-budget-hero.png",
     "cordis.patch.yml",
     "README.md",
     "README.zh.md",
@@ -42,10 +43,10 @@
     }
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "link:D:/Deepseek harness/vendor/cordis",
-    "@deepseek-ai/dsh-llm": "link:D:/Deepseek harness/packages/llm/llm",
-    "@deepseek-ai/dsh-system-prompt": "link:D:/Deepseek harness/packages/core/system-prompt",
-    "@deepseek-ai/dsh-tools": "link:D:/Deepseek harness/packages/core/tools",
+    "@deepseek-ai/cordis": "4.0.1",
+    "@deepseek-ai/dsh-llm": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-system-prompt": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-tools": "0.1.0-rc.6",
     "@types/node": "22.20.0",
     "typescript": "5.9.3",
     "vitest": "4.1.1"

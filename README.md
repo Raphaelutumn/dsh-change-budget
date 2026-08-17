@@ -1,25 +1,81 @@
-# dsh-change-budget
+<p align="center">
+  <img src="assets/dsh-change-budget-hero.png" alt="A bounded change budget protecting structured file mutations" width="100%">
+</p>
 
-[中文](README.zh.md)
+<h1 align="center">dsh-change-budget</h1>
 
-dsh-change-budget limits structured file mutations for each DeepSeek Harness Agent turn. It tracks write, edit, and the create, str_replace, and insert commands of str_replace_editor before they reach the tool body.
+<p align="center"><strong>Stop runaway file edits before they reach the tool body.</strong></p>
 
-## Install
+<p align="center">
+  <a href="https://github.com/Raphaelutumn/dsh-change-budget/releases"><img alt="Release" src="https://img.shields.io/github/v/release/Raphaelutumn/dsh-change-budget?display_name=tag&sort=semver&style=flat-square&color=1688f0"></a>
+  <a href="LICENSE"><img alt="License" src="https://img.shields.io/github/license/Raphaelutumn/dsh-change-budget?style=flat-square&color=35c2ff"></a>
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.9-3178c6?style=flat-square&logo=typescript&logoColor=white">
+  <img alt="DeepSeek Harness" src="https://img.shields.io/badge/DeepSeek_Harness-0.1.0--rc.5-7357ff?style=flat-square">
+  <a href="https://github.com/Raphaelutumn/dsh-change-budget/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/Raphaelutumn/dsh-change-budget?style=flat-square&color=f7c948"></a>
+</p>
 
-Install a local checkout into the deployed Web profile:
+<p align="center"><a href="README.zh.md">中文</a></p>
 
-```powershell
-$env:DSH_HOME='D:\Deepseek harness\.dsh'
-dsh plugin --profile web add 'D:\Deepseek harness\plugins\dsh-change-budget'
+dsh-change-budget gives every DeepSeek Harness Agent turn a configurable budget for structured file mutations. It counts distinct files, mutation calls, and submitted UTF-8 bytes before supported tools run—then rejects the first call that would cross a limit.
+
+> [!IMPORTANT]
+> This is an independent community plugin. It is not an official DeepSeek project.
+
+## Why change budgets?
+
+Coding Agents are good at moving quickly. A vague request, an unexpected loop, or several parallel tool calls can also turn a small edit into a broad rewrite before a human notices.
+
+dsh-change-budget adds a deterministic boundary at the tool pipeline. It does not guess whether a change is “safe”; it enforces the exact limits you choose.
+
+| Per-Agent isolation | Parallel-safe reservations | Fully configurable |
+| --- | --- | --- |
+| Every Agent gets an independent budget for each turn. | Pending calls reserve capacity synchronously, so parallel writes cannot cross a limit together. | Set positive-integer limits for files, calls, and payload bytes. |
+
+## How it works
+
+```mermaid
+flowchart LR
+    A["Supported mutation call"] --> B["Normalize path and count UTF-8 bytes"]
+    B --> C{"Reserve within this turn's budget?"}
+    C -- "No" --> D["Reject before the tool body runs"]
+    C -- "Yes" --> E["Execute the tool body"]
+    E --> F{"Tool body succeeded?"}
+    F -- "Yes" --> G["Commit the reservation"]
+    F -- "No" --> H["Release the reservation"]
 ```
 
-Install a packaged tarball:
+## Quick start
+
+### Install the release package
+
+Download and install the verified tarball:
 
 ```powershell
+Invoke-WebRequest `
+  -Uri 'https://github.com/Raphaelutumn/dsh-change-budget/releases/download/v0.1.0/dsh-change-budget-0.1.0.tgz' `
+  -OutFile '.\dsh-change-budget-0.1.0.tgz'
+
 dsh plugin --profile web add .\dsh-change-budget-0.1.0.tgz
 ```
 
-Remove it:
+When running DeepSeek Harness from a source checkout, invoke its CLI explicitly:
+
+```powershell
+$env:DSH_HOME='D:\Deepseek harness\.dsh'
+corepack pnpm --dir 'D:\Deepseek harness' dsh plugin --profile web add .\dsh-change-budget-0.1.0.tgz
+```
+
+### Build a local checkout
+
+```powershell
+git clone https://github.com/Raphaelutumn/dsh-change-budget.git
+Set-Location .\dsh-change-budget
+corepack pnpm install
+corepack pnpm pack --pack-destination .
+dsh plugin --profile web add .\dsh-change-budget-0.1.0.tgz
+```
+
+### Remove
 
 ```powershell
 dsh plugin --profile web remove dsh-change-budget
@@ -29,11 +85,11 @@ dsh plugin --profile web remove dsh-change-budget
 
 | Field | Default | Meaning |
 | --- | ---: | --- |
-| maxFilesPerTurn | 12 | Maximum distinct normalized paths in one Agent turn |
-| maxMutationsPerTurn | 24 | Maximum admitted structured mutation calls in one Agent turn |
-| maxPayloadBytesPerTurn | 262144 | Maximum UTF-8 bytes submitted as new text in one Agent turn |
+| `maxFilesPerTurn` | `12` | Maximum distinct normalized paths in one Agent turn |
+| `maxMutationsPerTurn` | `24` | Maximum admitted structured mutation calls in one Agent turn |
+| `maxPayloadBytesPerTurn` | `262144` | Maximum UTF-8 bytes submitted as new text in one Agent turn |
 
-Override the complete plugin config in the profile cordis.patch.yml:
+Override the plugin row in the profile's `cordis.patch.yml`:
 
 ```yaml
 - id: change-budget
@@ -43,34 +99,59 @@ Override the complete plugin config in the profile cordis.patch.yml:
     maxPayloadBytesPerTurn: 524288
 ```
 
-Every field must be a positive integer. Invalid configuration fails plugin loading.
+Every value must be a positive integer. Invalid configuration fails plugin loading instead of silently weakening the guardrail.
 
-## Behavior
+## Counted mutations
 
-The plugin keeps independent counters for each Agent. A new turn/start resets that Agent's counters. Pending parallel calls reserve capacity synchronously, so concurrent calls cannot cross a limit together. A failed tool body releases its reservation; a successful body consumes the reservation even when a later presentation policy blocks the returned result.
+| Tool | Operation | Path field | Counted payload |
+| --- | --- | --- | --- |
+| `write` | write/create | `file_path` | UTF-8 bytes in `content` |
+| `edit` | replace | `file_path` | UTF-8 bytes in `new_string` |
+| `str_replace_editor` | `create` | `path` | UTF-8 bytes in `file_text` |
+| `str_replace_editor` | `str_replace` | `path` | UTF-8 bytes in `new_str` |
+| `str_replace_editor` | `insert` | `path` | UTF-8 bytes in `new_str` |
 
-Repeated edits of the same normalized path consume additional mutation and byte capacity but count as one distinct file. Windows path keys are case-insensitive. Relative paths use the Session working directory.
+Read-only and malformed calls are ignored. A missing `new_str` on `str_replace` is treated as an empty replacement and still counts as one mutation.
 
 ## Model experience
 
-The first call that would cross a limit is rejected before the tool body runs:
+The first call that would cross any configured dimension is rejected before its tool body executes:
 
 ```text
 Change budget exceeded for this turn: files would reach 13/12. Blocked path: "src/generated/client.ts". Raise the plugin limit or continue in a new user turn.
 ```
 
+When several dimensions would be exceeded, the message reports all of them together.
+
+## Behavior details
+
+- Counters are isolated per Agent and reset when a new `turn/start` opens.
+- Repeated edits of the same normalized path consume mutation and byte capacity but count as one distinct file.
+- Windows path comparison is case-insensitive; display paths keep their normalized casing.
+- Relative paths resolve against the Session working directory.
+- Failed tool bodies release their reservation.
+- Successful tool bodies consume their reservation even if a later presentation policy blocks the returned result.
+
 ## Limitations
 
-- Bash, PowerShell, Shell, and other command tools can mutate files without structured path arguments; those mutations are not counted.
+- Bash, Shell, PowerShell, and other command tools can mutate files without structured path arguments; those mutations are not counted.
 - Symlinks, junctions, and other aliases are not resolved to one physical file.
 - Counters are in memory and do not persist across plugin reloads or Harness restarts.
-- The package has no dashboard, database, or automatic limit increase.
+- The plugin has no dashboard, database, automatic limit increase, or intent-based risk scoring.
 
-## Development
+## Contributing
+
+Issues and focused pull requests are welcome. To verify a change locally:
 
 ```powershell
-pnpm install
-pnpm test
-pnpm typecheck
-pnpm build
+corepack pnpm install
+corepack pnpm test
+corepack pnpm typecheck
+corepack pnpm build
 ```
+
+Please keep behavior claims covered by tests and document any new mutation tool explicitly.
+
+## License
+
+[MIT](LICENSE)

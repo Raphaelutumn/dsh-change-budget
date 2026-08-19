@@ -27,7 +27,7 @@ result: PASS
 
 The script fails if the first two calls are not allowed, the third call is not rejected, the rejection does not identify the blocked path, or the tool body runs more than twice. It does not write real files; its purpose is to prove the guard timing and the user-visible rejection message without changing a workspace.
 
-![Terminal demo showing the third file blocked before the tool body](/assets/dsh-change-budget-demo.svg)
+![Terminal demo showing the third file blocked before the tool body](../../assets/dsh-change-budget-demo.svg)
 
 ## What this proves
 

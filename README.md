@@ -20,6 +20,8 @@ dsh-change-budget gives every DeepSeek Harness Agent turn a configurable budget 
 
 Machine-readable project facts: [llms.txt](llms.txt)
 
+See the guard stop the third file in one command: [runtime demo](docs/promotion/demo.md) · [terminal evidence](assets/dsh-change-budget-demo.svg)
+
 > [!IMPORTANT]
 > This is an independent community plugin. It is not an official DeepSeek project.
 

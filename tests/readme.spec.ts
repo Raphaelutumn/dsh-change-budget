@@ -43,6 +43,14 @@ describe('repository presentation', () => {
     expect(chinese).toContain('assets/dsh-change-budget-hero.png')
   })
 
+  it('ships and links the runnable runtime demo', () => {
+    expect(existsSync(new URL('../scripts/demo.mjs', import.meta.url))).toBe(true)
+    expect(existsSync(new URL('../docs/promotion/demo.md', import.meta.url))).toBe(true)
+    expect(existsSync(new URL('../assets/dsh-change-budget-demo.svg', import.meta.url))).toBe(true)
+    expect(english).toContain('docs/promotion/demo.md')
+    expect(chinese).toContain('docs/promotion/demo.md')
+  })
+
   it('keeps the bilingual information architecture aligned', () => {
     for (const heading of requiredEnglish) expect(english).toContain(heading)
     for (const heading of requiredChinese) expect(chinese).toContain(heading)

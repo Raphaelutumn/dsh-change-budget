@@ -76,6 +76,7 @@
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
+    "demo": "pnpm run build && node scripts/demo.mjs",
     "verify": "pnpm run test && pnpm run typecheck && pnpm run build",
     "prepare": "pnpm run build"
   }

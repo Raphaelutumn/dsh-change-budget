@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760" role="img" aria-labelledby="title desc">
+  <title id="title">dsh-change-budget terminal demo</title>
+  <desc id="desc">Two file writes are allowed and the third is blocked before the tool body runs.</desc>
+  <rect width="1400" height="760" fill="#07111f"/>
+  <rect x="54" y="48" width="1292" height="664" rx="12" fill="#0d1b2e" stroke="#244563" stroke-width="2"/>
+  <circle cx="86" cy="80" r="8" fill="#ff6b6b"/><circle cx="112" cy="80" r="8" fill="#ffd166"/><circle cx="138" cy="80" r="8" fill="#06d6a0"/>
+  <text x="178" y="88" fill="#9fb5cc" font-family="Consolas, Menlo, monospace" font-size="20">PowerShell - dsh-change-budget demo</text>
+  <text x="92" y="148" fill="#66e3ff" font-family="Consolas, Menlo, monospace" font-size="24">PS&gt; corepack pnpm demo</text>
+  <text x="92" y="202" fill="#f4f7fb" font-family="Consolas, Menlo, monospace" font-size="24">dsh-change-budget demo</text>
+  <text x="92" y="244" fill="#9fb5cc" font-family="Consolas, Menlo, monospace" font-size="22">limit: maxFilesPerTurn=2</text>
+  <text x="92" y="302" fill="#06d6a0" font-family="Consolas, Menlo, monospace" font-size="22">write demo/first.txt  -&gt; ALLOWED (tool body ran)</text>
+  <text x="92" y="344" fill="#06d6a0" font-family="Consolas, Menlo, monospace" font-size="22">write demo/second.txt -&gt; ALLOWED (tool body ran)</text>
+  <text x="92" y="386" fill="#ff6b6b" font-family="Consolas, Menlo, monospace" font-size="22">write demo/third.txt  -&gt; BLOCKED before tool body</text>
+  <text x="92" y="444" fill="#ffb4b4" font-family="Consolas, Menlo, monospace" font-size="19">reason: Change budget exceeded for this turn: files would reach 3/2.</text>
+  <text x="92" y="480" fill="#ffb4b4" font-family="Consolas, Menlo, monospace" font-size="19">Blocked path: "&lt;cwd&gt;\demo\third.txt".</text>
+  <text x="92" y="516" fill="#9fb5cc" font-family="Consolas, Menlo, monospace" font-size="19">Raise the plugin limit or continue in a new user turn.</text>
+  <text x="92" y="574" fill="#f4f7fb" font-family="Consolas, Menlo, monospace" font-size="22">tool body calls: 2</text>
+  <text x="92" y="628" fill="#06d6a0" font-family="Consolas, Menlo, monospace" font-size="26">result: PASS</text>
+</svg>

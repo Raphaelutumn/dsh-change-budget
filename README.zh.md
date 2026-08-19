@@ -20,6 +20,8 @@ dsh-change-budget 为每个 DeepSeek Harness Agent 回合提供可配置的结�
 
 机器可读的项目事实：[llms.txt](llms.txt)
 
+一条命令查看第三个文件被拦截：[运行时演示](docs/promotion/demo.md) · [终端证据](assets/dsh-change-budget-demo.svg)
+
 > [!IMPORTANT]
 > 这是独立的社区插件，不是 DeepSeek 官方项目。
 

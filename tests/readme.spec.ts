@@ -122,4 +122,28 @@ describe('repository presentation', () => {
     expect(workflow).toContain('corepack pnpm run verify')
     expect(workflow).toContain('contents: read')
   })
+
+  it('provides complete, project-specific community contribution surfaces', () => {
+    const expectedFiles = [
+      '../CONTRIBUTING.md',
+      '../CODE_OF_CONDUCT.md',
+      '../SECURITY.md',
+      '../.github/ISSUE_TEMPLATE/bug.yml',
+      '../.github/ISSUE_TEMPLATE/compatibility.yml',
+      '../.github/ISSUE_TEMPLATE/config.yml',
+      '../.github/pull_request_template.md',
+    ]
+
+    for (const path of expectedFiles) expect(existsSync(new URL(path, import.meta.url))).toBe(true)
+  })
+
+  it('keeps contribution and security guidance aligned with the supported scope', () => {
+    const contributing = readFileSync(new URL('../CONTRIBUTING.md', import.meta.url), 'utf8')
+    const security = readFileSync(new URL('../SECURITY.md', import.meta.url), 'utf8')
+
+    expect(contributing).toContain('corepack pnpm run verify')
+    expect(contributing).toContain('structured mutation')
+    expect(security).toContain('Private vulnerability reporting')
+    expect(security).toMatch(/Shell|PowerShell/)
+  })
 })

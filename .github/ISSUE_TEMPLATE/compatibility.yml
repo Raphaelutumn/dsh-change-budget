@@ -1,0 +1,61 @@
+name: Compatibility report
+description: Share a tested DSH, Node.js, operating-system, or installation combination.
+title: "[Compatibility] "
+labels:
+  - compatibility
+body:
+  - type: input
+    id: plugin-version
+    attributes:
+      label: Plugin version or commit
+      placeholder: v0.1.0 or a commit SHA
+    validations:
+      required: true
+  - type: input
+    id: dsh-version
+    attributes:
+      label: DeepSeek Harness version
+    validations:
+      required: true
+  - type: input
+    id: node-version
+    attributes:
+      label: Node.js version
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: install
+    attributes:
+      label: Installation and configuration
+      description: Include commands and non-secret configuration needed to repeat the test.
+    validations:
+      required: true
+  - type: dropdown
+    id: outcome
+    attributes:
+      label: Outcome
+      options:
+        - Works as documented
+        - Works with a workaround
+        - Fails to load
+        - Loads but enforcement differs
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Verification evidence
+      description: Include the demo or verification output and any focused logs. Remove secrets first.
+    validations:
+      required: true

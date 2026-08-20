@@ -1,0 +1,69 @@
+name: Bug report
+description: Report a reproducible failure in supported structured mutation handling.
+title: "[Bug] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. Remove secrets and private repository content from all evidence.
+  - type: input
+    id: plugin-version
+    attributes:
+      label: Plugin version or commit
+      placeholder: v0.1.0 or a commit SHA
+    validations:
+      required: true
+  - type: input
+    id: dsh-version
+    attributes:
+      label: DeepSeek Harness version
+      placeholder: 0.1.0-rc.6
+    validations:
+      required: true
+  - type: input
+    id: node-version
+    attributes:
+      label: Node.js version
+      placeholder: 22.20.0
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Operating system and installation method
+      placeholder: Windows 11, installed from the v0.1.0 release tarball
+    validations:
+      required: true
+  - type: textarea
+    id: configuration
+    attributes:
+      label: Plugin configuration
+      description: Include the change-budget section of cordis.patch.yml without credentials.
+      render: yaml
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: List the exact supported tool calls and arguments needed to reproduce the behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Expected and observed result
+      description: Include the rejection message and whether the underlying tool body ran.
+    validations:
+      required: true
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope confirmation
+      options:
+        - label: This report concerns a supported structured mutation rather than a Shell, PowerShell, Bash, or arbitrary command write.
+          required: true
+        - label: I removed credentials and private repository content from the report.
+          required: true

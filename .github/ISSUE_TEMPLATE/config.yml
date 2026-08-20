@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Design and configuration questions
+    url: https://github.com/Raphaelutumn/dsh-change-budget/discussions
+    about: Use Discussions for design trade-offs, configuration questions, and early ideas.
+  - name: Private security or conduct report
+    url: https://github.com/Raphaelutumn/dsh-change-budget/security/advisories/new
+    about: Report vulnerabilities or sensitive conduct matters privately.

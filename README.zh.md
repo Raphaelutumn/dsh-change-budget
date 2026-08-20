@@ -9,6 +9,7 @@
 <p align="center">
   <a href="https://github.com/Raphaelutumn/dsh-change-budget/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/Raphaelutumn/dsh-change-budget/actions/workflows/ci.yml/badge.svg"></a>
   <a href="https://github.com/Raphaelutumn/dsh-change-budget/releases"><img alt="版本" src="https://img.shields.io/github/v/release/Raphaelutumn/dsh-change-budget?display_name=tag&sort=semver&style=flat-square&color=1688f0"></a>
+  <a href="https://www.npmjs.com/package/@raphelutumn/dsh-change-budget"><img alt="npm" src="https://img.shields.io/npm/v/@raphelutumn/dsh-change-budget?style=flat-square&color=cb3837"></a>
   <a href="LICENSE"><img alt="许可证" src="https://img.shields.io/github/license/Raphaelutumn/dsh-change-budget?style=flat-square&color=35c2ff"></a>
   <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.9-3178c6?style=flat-square&logo=typescript&logoColor=white">
   <img alt="DeepSeek Harness" src="https://img.shields.io/badge/DeepSeek_Harness-0.1.0--rc.5-7357ff?style=flat-square">
@@ -68,6 +69,12 @@ flowchart LR
 
 ## 快速开始
 
+### 从 npm 安装
+
+```powershell
+dsh plugin --profile web add @raphelutumn/dsh-change-budget@0.1.0
+```
+
 ### 安装 Release 包
 
 下载并安装经过校验的 tarball：
@@ -94,7 +101,7 @@ git clone https://github.com/Raphaelutumn/dsh-change-budget.git
 Set-Location .\dsh-change-budget
 corepack pnpm install
 corepack pnpm pack --pack-destination .
-dsh plugin --profile web add .\dsh-change-budget-0.1.0.tgz
+dsh plugin --profile web add .\raphelutumn-dsh-change-budget-0.1.0.tgz
 ```
 
 ### 卸载

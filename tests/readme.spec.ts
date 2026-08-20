@@ -4,12 +4,14 @@ import { describe, expect, it } from 'vitest'
 const english = readFileSync(new URL('../README.md', import.meta.url), 'utf8')
 const chinese = readFileSync(new URL('../README.zh.md', import.meta.url), 'utf8')
 const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')) as {
+  name: string
   description: string
   keywords: string[]
   repository: { type: string; url: string }
   homepage: string
   bugs: { url: string }
   files: string[]
+  publishConfig: { access: string }
 }
 
 const requiredEnglish = [
@@ -83,6 +85,8 @@ describe('repository presentation', () => {
   })
 
   it('publishes consistent npm discovery metadata', () => {
+    expect(pkg.name).toBe('@raphelutumn/dsh-change-budget')
+    expect(pkg.publishConfig.access).toBe('public')
     expect(pkg.description).toMatch(/DeepSeek Harness/i)
     expect(pkg.description).toMatch(/limit/i)
     expect(pkg.keywords).toEqual(expect.arrayContaining([
@@ -96,6 +100,9 @@ describe('repository presentation', () => {
     expect(pkg.homepage).toContain('Raphaelutumn/dsh-change-budget')
     expect(pkg.bugs.url).toContain('Raphaelutumn/dsh-change-budget/issues')
     expect(pkg.files).toContain('llms.txt')
+    for (const readme of [english, chinese]) {
+      expect(readme).toContain('dsh plugin --profile web add @raphelutumn/dsh-change-budget@0.1.0')
+    }
   })
 
   it('exposes CI, a short proof path, and compatibility in both languages', () => {

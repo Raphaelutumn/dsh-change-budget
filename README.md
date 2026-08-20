@@ -37,9 +37,6 @@ The demo allows two files, blocks the third before its tool body runs, and fails
 
 ![Terminal demo showing the third file blocked before the tool body](assets/dsh-change-budget-demo.svg)
 
-> [!IMPORTANT]
-> This is an independent community plugin. It is not an official DeepSeek project.
-
 ## Why change budgets?
 
 Coding Agents are good at moving quickly. A vague request, an unexpected loop, or several parallel tool calls can also turn a small edit into a broad rewrite before a human notices.

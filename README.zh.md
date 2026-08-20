@@ -37,9 +37,6 @@ corepack pnpm demo
 
 ![终端演示：第三个文件在工具主体运行前被拦截](assets/dsh-change-budget-demo.svg)
 
-> [!IMPORTANT]
-> 这是独立的社区插件，不是 DeepSeek 官方项目。
-
 ## 为什么需要修改额度？
 
 编码 Agent 很擅长快速推进工作，但模糊需求、意外循环或多个并行工具调用，也可能在人工察觉前把一次小修改扩大成大范围重写。

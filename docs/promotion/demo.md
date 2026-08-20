@@ -2,15 +2,19 @@
 
 This demo proves the timing that matters: the third structured file mutation is rejected before the tool body runs.
 
-## Run it
+## 30-second proof
 
-From the repository root:
+After dependencies are installed, run this from the repository root:
 
 ```powershell
 corepack pnpm demo
 ```
 
 The command builds `lib/`, starts a minimal Cordis tool runtime, loads `dsh-change-budget`, and invokes the same `write` tool three times in one Agent turn. The demo limit is two distinct files.
+
+| Without the plugin | With `dsh-change-budget` |
+| --- | --- |
+| The third structured write reaches the registered tool body. | The third distinct path is rejected before the registered tool body, so the body-call count stays at two. |
 
 Expected output:
 

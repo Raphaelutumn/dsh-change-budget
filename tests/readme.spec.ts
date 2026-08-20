@@ -97,4 +97,29 @@ describe('repository presentation', () => {
     expect(pkg.bugs.url).toContain('Raphaelutumn/dsh-change-budget/issues')
     expect(pkg.files).toContain('llms.txt')
   })
+
+  it('exposes CI, a short proof path, and compatibility in both languages', () => {
+    for (const readme of [english, chinese]) {
+      expect(readme).toContain('actions/workflows/ci.yml/badge.svg')
+      expect(readme).toContain('assets/dsh-change-budget-demo.svg')
+      expect(readme).toMatch(/30-second|30 秒/)
+      expect(readme).toMatch(/Without the plugin|未安装插件/)
+      expect(readme).toMatch(/Compatibility|兼容性/)
+      expect(readme).toContain('Node.js 20')
+      expect(readme).toContain('Node.js 22')
+      expect(readme).toContain('Node.js 24')
+    }
+  })
+
+  it('runs the complete verification command across supported Node releases', () => {
+    const workflowUrl = new URL('../.github/workflows/ci.yml', import.meta.url)
+    expect(existsSync(workflowUrl)).toBe(true)
+    if (!existsSync(workflowUrl)) return
+    const workflow = readFileSync(workflowUrl, 'utf8')
+
+    expect(workflow).toContain('node-version: [20, 22, 24]')
+    expect(workflow).toContain('corepack pnpm install --frozen-lockfile')
+    expect(workflow).toContain('corepack pnpm run verify')
+    expect(workflow).toContain('contents: read')
+  })
 })

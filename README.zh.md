@@ -7,6 +7,7 @@
 <p align="center"><strong>在文件修改进入工具主体之前，阻止失控的批量编辑。</strong></p>
 
 <p align="center">
+  <a href="https://github.com/Raphaelutumn/dsh-change-budget/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/Raphaelutumn/dsh-change-budget/actions/workflows/ci.yml/badge.svg"></a>
   <a href="https://github.com/Raphaelutumn/dsh-change-budget/releases"><img alt="版本" src="https://img.shields.io/github/v/release/Raphaelutumn/dsh-change-budget?display_name=tag&sort=semver&style=flat-square&color=1688f0"></a>
   <a href="LICENSE"><img alt="许可证" src="https://img.shields.io/github/license/Raphaelutumn/dsh-change-budget?style=flat-square&color=35c2ff"></a>
   <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.9-3178c6?style=flat-square&logo=typescript&logoColor=white">
@@ -20,7 +21,21 @@ dsh-change-budget 为每个 DeepSeek Harness Agent 回合提供可配置的结�
 
 机器可读的项目事实：[llms.txt](llms.txt)
 
-一条命令查看第三个文件被拦截：[运行时演示](docs/promotion/demo.md) · [终端证据](assets/dsh-change-budget-demo.svg)
+## 30 秒演示
+
+安装依赖后只需运行一条命令：
+
+```powershell
+corepack pnpm demo
+```
+
+演示会放行前两个文件，在第三个文件进入工具主体前将其拦截；如果工具主体的实际执行次数不是两次，脚本会失败。查看[运行时证明](docs/promotion/demo.md)。
+
+| 未安装插件 | 安装 `dsh-change-budget` 后 |
+| --- | --- |
+| 小任务意外扩展到更多文件时，结构化写入仍会进入工具主体。 | 首个超过文件数、调用数或字节数上限的写入会在工具主体运行前被拒绝。 |
+
+![终端演示：第三个文件在工具主体运行前被拦截](assets/dsh-change-budget-demo.svg)
 
 > [!IMPORTANT]
 > 这是独立的社区插件，不是 DeepSeek 官方项目。
@@ -122,6 +137,18 @@ dsh plugin --profile web remove dsh-change-budget
 | `str_replace_editor` | `insert` | `path` | `new_str` 的 UTF-8 字节数 |
 
 只读调用和参数格式错误的调用不会计数。`str_replace` 缺少 `new_str` 时会按空字符串处理，但仍计为一次修改。
+
+## 兼容性
+
+| 环境 | 支持和验证情况 |
+| --- | --- |
+| Node.js 20 | CI 覆盖 Ubuntu、macOS 和 Windows |
+| Node.js 22 | CI 覆盖 Ubuntu、macOS 和 Windows |
+| Node.js 24 | CI 覆盖 Ubuntu、macOS 和 Windows |
+| DeepSeek Harness | Peer 范围为 `^0.1.0-rc.5`；开发测试和运行时演示使用 `0.1.0-rc.6` 软件包 |
+| 结构化工具 | 上表列出的 `write`、`edit` 和受支持的 `str_replace_editor` 操作 |
+
+CI 会在上述 Node.js 与操作系统矩阵中执行测试、类型检查和构建，但不代表任意 Shell、PowerShell、Bash、符号链接或 junction 写入已被覆盖。
 
 ## 模型看到的提示
 
